@@ -1,0 +1,50 @@
+{
+  "name": "daily-tip",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run build:compile && npm run build:copy-collections && npm run build:fix-executables && npm run build:web",
+    "build:compile": "tsc",
+    "build:fix-executables": "chmod +x ./dist/bin/*.js",
+    "build:copy-collections": "cp -R ./collections ./dist/",
+    "build:web": "tsc -p tsconfig.web.json && cp src/web/index.html dist/public/ && ts-node src/bin/daily-lead-web.ts",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "daily-lead": "ts-node src/bin/daily-lead.ts",
+    "daily-lead:leadership": "ts-node src/bin/daily-lead.ts leadership-tone",
+    "daily-lead:productivity": "ts-node src/bin/daily-lead.ts productivity-hacks",
+    "serve": "npx http-server dist/public -p 8080 -o"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/jest": "^30.0.0",
+    "@types/marked": "^5.0.2",
+    "@types/marked-terminal": "^6.1.1",
+    "@types/node": "^24.10.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^29.7.0",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.4"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "marked": "^15.0.12",
+    "marked-terminal": "^7.3.0"
+  }
+}

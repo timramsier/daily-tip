@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Leadership Tip</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #764ba2 0%, #e91e63 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .title-wrapper {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 72px;
+      font-weight: bold;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .author {
+      font-size: 24px;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .content-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 140px);
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    #tip-content {
+      color: #333;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    #tip-content h3 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-align: left;
+    }
+
+    #tip-content p {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    #tip-content strong {
+      color: #764ba2;
+      font-weight: 600;
+    }
+
+    #tip-content em {
+      color: #666;
+      font-style: italic;
+    }
+
+    #tip-content ul {
+      margin: 16px 0;
+      padding-left: 20px;
+    }
+
+    #tip-content li {
+      margin: 8px 0;
+    }
+
+    #tip-content .category-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .loading {
+      text-align: center;
+      color: #667eea;
+      font-size: 18px;
+    }
+
+    .refresh-btn {
+      margin-top: 24px;
+      padding: 12px 24px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .refresh-btn:hover {
+      background: #764ba2;
+    }
+  </style>
+</head>
+<body>
+  <div class="title-wrapper">
+    <h1 class="page-title">Daily Tip</h1>
+    <span class="author">by Tim</span>
+  </div>
+  <div class="content-wrapper">
+    <div class="container">
+      <div id="tip-content" class="loading">Loading your daily tip...</div>
+      <button class="refresh-btn" onclick="location.reload()">Get New Tip</button>
+    </div>
+  </div>
+  <script src="tip-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

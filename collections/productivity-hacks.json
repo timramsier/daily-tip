@@ -1,0 +1,45 @@
+{
+  "title": "Productivity Hacks",
+  "tips": [
+    {
+      "title": "The Two-Minute Rule",
+      "tip": "**If it takes less than two minutes, do it now.**\n\nExamples:\n- *\"Reply to that quick email\"*\n- *\"File that document\"*\n- *\"Schedule that meeting\"*\n\nSmall tasks pile up fast. Clear them immediately to keep your mental space free."
+    },
+    {
+      "title": "Time Block Your Deep Work",
+      "tip": "**Protect 2-4 hour blocks for focused work.**\n\nBest practices:\n- *\"No meetings before 11am\"*\n- *\"Turn off all notifications\"*\n- *\"Close email and Slack\"*\n\nYour best work happens in uninterrupted stretches."
+    },
+    {
+      "title": "Batch Similar Tasks",
+      "tip": "**Group similar activities together.**\n\nExamples:\n- *\"Answer all emails in one session\"*\n- *\"Make all your calls back-to-back\"*\n- *\"Review all PRs at once\"*\n\nContext switching kills productivity. Batching saves mental energy."
+    },
+    {
+      "title": "Use the Pomodoro Technique",
+      "tip": "**Work in 25-minute focused sprints.**\n\nThe cycle:\n- *\"25 minutes of focused work\"*\n- *\"5 minute break\"*\n- *\"Repeat 4 times, then take 15-30 minutes\"*\n\nShort bursts maintain high energy and focus."
+    },
+    {
+      "title": "Start With Your Hardest Task",
+      "tip": "**Tackle your most challenging work first thing.**\n\nWhy it works:\n- *\"Your willpower is highest in the morning\"*\n- *\"Everything else feels easier after\"*\n- *\"You avoid procrastination anxiety\"*\n\nEat the frog first."
+    },
+    {
+      "title": "Keep a 'Done' List",
+      "tip": "**Track what you've accomplished, not just what's left.**\n\nBenefits:\n- *\"Builds momentum and motivation\"*\n- *\"Provides evidence of progress\"*\n- *\"Great for performance reviews\"*\n\nCelebrate your wins, no matter how small."
+    },
+    {
+      "title": "The 80/20 Rule",
+      "tip": "**Focus on the 20% of work that creates 80% of results.**\n\nAsk yourself:\n- *\"What will have the biggest impact?\"*\n- *\"What can only I do?\"*\n- *\"What moves the needle most?\"*\n\nNot all tasks are created equal."
+    },
+    {
+      "title": "Set Implementation Intentions",
+      "tip": "**Use 'if-then' planning for habits.**\n\nFormat:\n- *\"If it's 9am, then I'll start my deep work block\"*\n- *\"If I finish a task, then I'll take a 5-minute break\"*\n- *\"If I get stuck, then I'll ask for help within 30 minutes\"*\n\nSpecific triggers create automatic behaviors."
+    },
+    {
+      "title": "Limit Work In Progress",
+      "tip": "**Finish what you start before starting something new.**\n\nRule of thumb:\n- *\"Maximum 3 active projects\"*\n- *\"One primary focus per day\"*\n- *\"Complete before you accumulate\"*\n\nMultitasking is a myth. Serial focus wins."
+    },
+    {
+      "title": "Take Real Breaks",
+      "tip": "**Step away from your screen completely.**\n\nEffective breaks:\n- *\"Walk outside for 10 minutes\"*\n- *\"Stretch or do light exercise\"*\n- *\"Chat with a colleague face-to-face\"*\n\nScrolling social media isn't a break. Your brain needs actual rest."
+    }
+  ]
+}
