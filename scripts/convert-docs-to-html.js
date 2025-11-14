@@ -11,7 +11,10 @@ const outputDir = path.join(__dirname, '../dist/public/docs/development');
 const template = (title, content, depth) => {
   const prefix = '../'.repeat(depth);
   const toRoot = depth === 0 ? '' : '../'.repeat(depth);
-  const sharedStylesPath = `${toRoot}../../shared-styles.css`;
+  // Path to shared-styles.css from development folder
+  // depth 0: development/file.html -> ../shared-styles.css
+  // depth 1: development/SOLID/file.html -> ../../shared-styles.css
+  const sharedStylesPath = `${toRoot}../shared-styles.css`;
   
   return `<!DOCTYPE html>
 <html lang="en">
