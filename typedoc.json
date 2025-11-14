@@ -13,7 +13,12 @@
   "includeVersion": true,
   "readme": "README.md",
   "name": "Daily Tip - API Documentation",
-  "navigationLinks": {},
+  "navigationLinks": {
+    "Development Docs": "development/README.html",
+    "Architecture": "development/architecture.html",
+    "SOLID Principles": "development/SOLID/README.html",
+    "Design Patterns": "development/design-patterns/README.html"
+  },
   "plugin": [],
   "theme": "default",
   "categorizeByGroup": true,

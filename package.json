@@ -24,7 +24,7 @@
     "daily-tip:productivity": "ts-node src/bin/daily-tip.ts productivity-hacks",
     "daily-tip:all": "ts-node src/bin/daily-tip.ts leadership-tone productivity-hacks",
     "serve": "npx http-server dist/public -p 8080 -o",
-    "docs": "typedoc && node scripts/convert-docs-to-html.js",
+    "docs": "typedoc && node scripts/convert-docs-to-html.js && cp docs/shared-styles.css dist/public/docs/",
     "docs:serve": "npx http-server dist/public/docs -p 8081 -o"
   },
   "author": "",
