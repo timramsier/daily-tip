@@ -50,69 +50,69 @@ graph TB
 classDiagram
     class TipLoader {
         <<interface>>
-        +getTips() Tip[]
-        +getCollectionTitle() string
+        +getTips()
+        +getCollectionTitle()
     }
     
     class TipSelector {
         <<interface>>
-        +getTip(tips) Tip
+        +getTip(tips)
     }
     
     class TipFormatter {
         <<interface>>
-        +formatTip(tip, categoryTitle) T
+        +formatTip(tip, categoryTitle)
     }
     
     class TipOrchestrator {
         <<interface>>
-        +getTip() T
+        +getTip()
     }
     
     class DailyTipBuilder {
-        -loader TipLoader
-        -selector TipSelector
-        -formatter TipFormatter
-        -orchestratorClass Class
-        +withLoader(loader) this
-        +withSelector(selector) this
-        +withFormatter(formatter) this
-        +withOrchestrator(orchestrator) this
-        +build() TipOrchestrator
+        -loader
+        -selector
+        -formatter
+        -orchestratorClass
+        +withLoader(loader)
+        +withSelector(selector)
+        +withFormatter(formatter)
+        +withOrchestrator(orchestrator)
+        +build()
     }
     
     class DefaultTipOrchestrator {
-        -tips Tip[]
-        -selector TipSelector
-        -formatter TipFormatter
-        -collectionTitle string
-        +getTip() T
+        -tips
+        -selector
+        -formatter
+        -collectionTitle
+        +getTip()
     }
     
     class JsonTipLoader {
-        -tips Tip[]
-        -collectionTitle string
-        +getTips() Tip[]
-        +getCollectionTitle() string
+        -tips
+        -collectionTitle
+        +getTips()
+        +getCollectionTitle()
     }
     
     class CompositeTipLoader {
-        -tips TipCollection
-        +getTips() Tip[]
-        +getCollectionTitle() string
+        -tips
+        +getTips()
+        +getCollectionTitle()
     }
     
     class RandomTipSelector {
-        +getTip(tips) Tip
+        +getTip(tips)
     }
     
     class HtmlTipFormatter {
-        -marked Marked
-        +formatTip(tip, categoryTitle) string
+        -marked
+        +formatTip(tip, categoryTitle)
     }
     
     class ShellTipFormatter {
-        +formatTip(tip, categoryTitle) string
+        +formatTip(tip, categoryTitle)
     }
     
     TipLoader <|.. JsonTipLoader
@@ -122,14 +122,14 @@ classDiagram
     TipFormatter <|.. ShellTipFormatter
     TipOrchestrator <|.. DefaultTipOrchestrator
     
-    DailyTipBuilder --> TipLoader : uses
-    DailyTipBuilder --> TipSelector : uses
-    DailyTipBuilder --> TipFormatter : uses
-    DailyTipBuilder ..> TipOrchestrator : creates
+    DailyTipBuilder --> TipLoader
+    DailyTipBuilder --> TipSelector
+    DailyTipBuilder --> TipFormatter
+    DailyTipBuilder ..> TipOrchestrator
     
-    DefaultTipOrchestrator --> TipLoader : uses
-    DefaultTipOrchestrator --> TipSelector : uses
-    DefaultTipOrchestrator --> TipFormatter : uses
+    DefaultTipOrchestrator --> TipLoader
+    DefaultTipOrchestrator --> TipSelector
+    DefaultTipOrchestrator --> TipFormatter
 ```
 
 ## Core Components
