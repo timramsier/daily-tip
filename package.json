@@ -22,6 +22,7 @@
     "daily-tip": "ts-node src/bin/daily-tip.ts",
     "daily-tip:leadership": "ts-node src/bin/daily-tip.ts leadership-tone",
     "daily-tip:productivity": "ts-node src/bin/daily-tip.ts productivity-hacks",
+    "daily-tip:all": "ts-node src/bin/daily-tip.ts leadership-tone productivity-hacks",
     "serve": "npx http-server dist/public -p 8080 -o"
   },
   "author": "",

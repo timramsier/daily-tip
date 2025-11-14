@@ -2,6 +2,7 @@
 
 import DailyTipBuilder from '../index';
 import { JsonTipLoader } from '../loaders/json-tip-loader';
+import { CompositeTipLoader } from '../loaders/composite-loader';
 import RandomTipSelector from '../selectors/random-tip';
 import DefaultTipOrchestrator from '../orchestrator/default';
 import { ShellTipFormatter } from '../formatters/shell-formatter';
@@ -19,7 +20,7 @@ function getAvailableCollections(): string[] {
 
 function showHelp() {
   const collections = getAvailableCollections();
-  console.log('Usage: daily-tip <collection-type>');
+  console.log('Usage: daily-tip <collection-type> [collection-type...]');
   console.log('');
   console.log('Available collections:');
   collections.forEach((name) => console.log(`  - ${name}`));
@@ -27,29 +28,42 @@ function showHelp() {
   console.log('Examples:');
   console.log('  daily-tip leadership-tone');
   console.log('  daily-tip productivity-hacks');
+  console.log('  daily-tip leadership-tone productivity-hacks');
 }
 
-// Get tip type from command line argument
-const tipType = process.argv[2];
+// Get tip types from command line arguments
+const tipTypes = process.argv.slice(2);
 
 // Show help if no argument or help flag
-if (!tipType || tipType === '--help' || tipType === '-h') {
+if (tipTypes.length === 0 || tipTypes.includes('--help') || tipTypes.includes('-h')) {
   showHelp();
-  process.exit(tipType ? 0 : 1);
+  process.exit(tipTypes.length === 0 ? 1 : 0);
 }
 
-const collectionPath = path.resolve(collectionsDir, `${tipType}.json`);
+// Validate all collections exist
+const invalidCollections = tipTypes.filter((type) => {
+  const collectionPath = path.resolve(collectionsDir, `${type}.json`);
+  return !fs.existsSync(collectionPath);
+});
 
-// Check if collection exists
-if (!fs.existsSync(collectionPath)) {
-  console.error(`Error: Collection '${tipType}' not found.\n`);
+if (invalidCollections.length > 0) {
+  console.error(`Error: Collection(s) not found: ${invalidCollections.join(', ')}\n`);
   showHelp();
   process.exit(1);
 }
 
+// Create loaders for each collection
+const loaders = tipTypes.map((type) => {
+  const collectionPath = path.resolve(collectionsDir, `${type}.json`);
+  return new JsonTipLoader(collectionPath);
+});
+
+// Use composite loader if multiple collections, otherwise use single loader
+const loader = loaders.length > 1 ? new CompositeTipLoader(loaders) : loaders[0];
+
 const builder = new DailyTipBuilder<string>();
 const orchestrator = builder
-  .withLoader(new JsonTipLoader(collectionPath))
+  .withLoader(loader)
   .withSelector(new RandomTipSelector())
   .withFormatter(new ShellTipFormatter())
   .withOrchestrator(DefaultTipOrchestrator)

@@ -54,4 +54,46 @@ describe('HtmlTipFormatter', () => {
     expect(result).toContain('<li>Item one</li>');
     expect(result).toContain('<li>Item two</li>');
   });
+
+  it('should style collection title in italic format with smaller grey text', () => {
+    const tip: Tip = {
+      title: 'Test Title *Collection Name*',
+      tip: 'This is a test tip.',
+    };
+
+    const result = formatter.formatTip(tip);
+
+    expect(result).toContain('Test Title');
+    expect(result).toContain(
+      '<div style="font-size: 0.7em; color: #999; font-style: italic;">Collection Name</div>'
+    );
+    expect(result).not.toContain('*Collection Name*');
+  });
+
+  it('should handle titles without collection names', () => {
+    const tip: Tip = {
+      title: 'Regular Title',
+      tip: 'This is a test tip.',
+    };
+
+    const result = formatter.formatTip(tip);
+
+    expect(result).toContain('<h3>Regular Title</h3>');
+  });
+
+  it('should only style italic text at the end of title', () => {
+    const tip: Tip = {
+      title: 'Title with *emphasis* and *Collection*',
+      tip: 'This is a test tip.',
+    };
+
+    const result = formatter.formatTip(tip);
+
+    // First italic should remain as markdown em
+    expect(result).toContain('<em>emphasis</em>');
+    // Last italic should be styled as collection
+    expect(result).toContain(
+      '<div style="font-size: 0.7em; color: #999; font-style: italic;">Collection</div>'
+    );
+  });
 });
