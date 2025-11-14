@@ -1,7 +1,7 @@
 {
   "entryPoints": ["src"],
   "entryPointStrategy": "expand",
-  "out": "dist/docs",
+  "out": "dist/public/docs",
   "exclude": [
     "**/*.test.ts",
     "**/__tests__/**",
@@ -13,9 +13,7 @@
   "includeVersion": true,
   "readme": "README.md",
   "name": "Daily Tip - API Documentation",
-  "navigationLinks": {
-    "Main README": "../README.html"
-  },
+  "navigationLinks": {},
   "plugin": [],
   "theme": "default",
   "categorizeByGroup": true,

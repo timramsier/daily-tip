@@ -121,6 +121,24 @@
     .refresh-btn:hover {
       background: #764ba2;
     }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .footer a:hover {
+      color: rgba(255, 255, 255, 1);
+    }
   </style>
 </head>
 <body>
@@ -133,6 +151,9 @@
       <div id="tip-content" class="loading">Loading your daily tip...</div>
       <button class="refresh-btn" onclick="location.reload()">Get New Tip</button>
     </div>
+  </div>
+  <div class="footer">
+    <a href="docs/index.html">📚 View Developer Documentation</a>
   </div>
   <script src="tip-data.js"></script>
   <script src="app.js"></script>

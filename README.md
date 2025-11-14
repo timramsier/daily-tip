@@ -252,7 +252,7 @@ The system follows SOLID principles and uses several design patterns:
 - **Builder Pattern**: Fluent API for constructing the tip system
 - **Dependency Injection**: Components receive dependencies through constructors
 
-For detailed architecture documentation, see [docs/development/architecture.md](docs/development/architecture.md).
+For detailed architecture documentation, see [development/architecture.html](development/architecture.html).
 
 ## Documentation
 
@@ -261,21 +261,25 @@ For detailed architecture documentation, see [docs/development/architecture.md](
 After building, you can view the complete API documentation:
 
 ```bash
-npm run build        # Generates docs in dist/docs/
+npm run build        # Generates docs in dist/public/docs/
 npm run docs:serve   # Serves docs at http://localhost:8081
 ```
 
 Or generate docs separately:
 ```bash
-npm run docs         # Generate API docs only
+npm run docs         # Generate API docs and convert development docs to HTML
 ```
+
+The documentation includes:
+- **API Documentation**: TypeDoc-generated API reference at `/docs/index.html`
+- **Development Documentation**: Converted markdown docs at `/docs/development/`
 
 ### Developer Documentation
 
-- [Architecture Overview](docs/development/architecture.md)
-- [SOLID Principles](docs/development/SOLID/)
-- [Design Patterns](docs/development/design-patterns/)
-- [Contributing Guide](docs/development/contributing.md)
+- [Architecture Overview](development/architecture.html)
+- [SOLID Principles](development/SOLID/README.html)
+- [Design Patterns](development/design-patterns/README.html)
+- [Contributing Guide](development/contributing.html)
 
 ## Available Collections
 
@@ -314,7 +318,7 @@ ISC
 
 ## Contributing
 
-Contributions are welcome! Please read the [Contributing Guide](docs/development/contributing.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read the [Contributing Guide](development/contributing.html) for details on our code of conduct and the process for submitting pull requests.
 
 ## Tips for Success
 
@@ -353,4 +357,4 @@ npm run serve
 
 ## Support
 
-For issues, questions, or contributions, please refer to the [Contributing Guide](docs/development/contributing.md).
+For issues, questions, or contributions, please refer to the [Contributing Guide](development/contributing.html).

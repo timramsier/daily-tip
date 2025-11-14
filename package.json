@@ -24,8 +24,8 @@
     "daily-tip:productivity": "ts-node src/bin/daily-tip.ts productivity-hacks",
     "daily-tip:all": "ts-node src/bin/daily-tip.ts leadership-tone productivity-hacks",
     "serve": "npx http-server dist/public -p 8080 -o",
-    "docs": "typedoc",
-    "docs:serve": "npx http-server dist/docs -p 8081 -o"
+    "docs": "typedoc && node scripts/convert-docs-to-html.js",
+    "docs:serve": "npx http-server dist/public/docs -p 8081 -o"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +42,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "jest": "^29.7.0",
+    "marked-cli": "^0.3.1",
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
