@@ -19,14 +19,14 @@ function getAvailableCollections(): string[] {
 
 function showHelp() {
   const collections = getAvailableCollections();
-  console.log('Usage: daily-lead <collection-type>');
+  console.log('Usage: daily-tip <collection-type>');
   console.log('');
   console.log('Available collections:');
   collections.forEach((name) => console.log(`  - ${name}`));
   console.log('');
   console.log('Examples:');
-  console.log('  daily-lead leadership-tone');
-  console.log('  daily-lead productivity-hacks');
+  console.log('  daily-tip leadership-tone');
+  console.log('  daily-tip productivity-hacks');
 }
 
 // Get tip type from command line argument
