@@ -6,14 +6,14 @@ import { Tip, TipCollection, TipLoader } from '.';
  * This loader reads a JSON file at construction time and caches the tips and collection
  * title for subsequent retrieval. The JSON file must conform to the TipCollection structure.
  *
+ * Implements the {@link TipLoader} interface.
+ *
  * @example
  * ```typescript
  * const loader = new JsonTipLoader('./collections/leadership-tips.json');
  * const tips = loader.getTips(); // Returns array of tips
  * const title = loader.getCollectionTitle(); // Returns "Leadership Tips"
  * ```
- *
- * @implements {TipLoader}
  */
 export class JsonTipLoader implements TipLoader {
   /** Cached array of tips loaded from the JSON file */

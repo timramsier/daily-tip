@@ -1,0 +1,37 @@
+{
+  "entryPoints": ["src"],
+  "entryPointStrategy": "expand",
+  "out": "dist/docs",
+  "exclude": [
+    "**/*.test.ts",
+    "**/__tests__/**",
+    "**/node_modules/**"
+  ],
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "includeVersion": true,
+  "readme": "README.md",
+  "name": "Daily Tip - API Documentation",
+  "navigationLinks": {
+    "Main README": "../README.html"
+  },
+  "plugin": [],
+  "theme": "default",
+  "categorizeByGroup": true,
+  "categoryOrder": [
+    "Loaders",
+    "Selectors", 
+    "Formatters",
+    "Orchestrators",
+    "Builder",
+    "*"
+  ],
+  "sort": ["source-order"],
+  "visibilityFilters": {
+    "protected": true,
+    "private": true,
+    "inherited": true,
+    "external": false
+  }
+}

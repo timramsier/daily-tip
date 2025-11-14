@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run build:compile && npm run build:copy-collections && npm run build:fix-executables && npm run build:web",
+    "build": "npm run build:compile && npm run build:copy-collections && npm run build:fix-executables && npm run build:web && npm run docs",
     "build:compile": "tsc",
     "build:fix-executables": "chmod +x ./dist/bin/*.js",
     "build:copy-collections": "cp -R ./collections ./dist/",
@@ -23,7 +23,9 @@
     "daily-tip:leadership": "ts-node src/bin/daily-tip.ts leadership-tone",
     "daily-tip:productivity": "ts-node src/bin/daily-tip.ts productivity-hacks",
     "daily-tip:all": "ts-node src/bin/daily-tip.ts leadership-tone productivity-hacks",
-    "serve": "npx http-server dist/public -p 8080 -o"
+    "serve": "npx http-server dist/public -p 8080 -o",
+    "docs": "typedoc",
+    "docs:serve": "npx http-server dist/docs -p 8081 -o"
   },
   "author": "",
   "license": "ISC",
@@ -43,6 +45,7 @@
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.14",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.4"
   },

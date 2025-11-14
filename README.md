@@ -256,6 +256,22 @@ For detailed architecture documentation, see [docs/development/architecture.md](
 
 ## Documentation
 
+### Generated API Documentation
+
+After building, you can view the complete API documentation:
+
+```bash
+npm run build        # Generates docs in dist/docs/
+npm run docs:serve   # Serves docs at http://localhost:8081
+```
+
+Or generate docs separately:
+```bash
+npm run docs         # Generate API docs only
+```
+
+### Developer Documentation
+
 - [Architecture Overview](docs/development/architecture.md)
 - [SOLID Principles](docs/development/SOLID/)
 - [Design Patterns](docs/development/design-patterns/)
@@ -284,6 +300,8 @@ For detailed architecture documentation, see [docs/development/architecture.md](
 | `npm run daily-tip:productivity` | Productivity tips |
 | `npm run daily-tip:all` | All collections |
 | `npm run serve` | Serve web app |
+| `npm run docs` | Generate API documentation |
+| `npm run docs:serve` | Serve API docs at port 8081 |
 
 ## Requirements
 

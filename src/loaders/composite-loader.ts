@@ -7,6 +7,8 @@ import { Tip, TipCollection, TipLoader } from '.';
  * to be treated as a single loader. It merges tips from all provided loaders and
  * appends collection names to tip titles for identification.
  *
+ * Implements the {@link TipLoader} interface.
+ *
  * @example
  * ```typescript
  * const loader1 = new JsonTipLoader('leadership.json');
@@ -18,8 +20,6 @@ import { Tip, TipCollection, TipLoader } from '.';
  * // Returns "Leadership Tips, Productivity Hacks"
  * const title = composite.getCollectionTitle();
  * ```
- *
- * @implements {TipLoader}
  */
 export class CompositeTipLoader implements TipLoader {
   /** Combined collection containing all tips from all loaders */
