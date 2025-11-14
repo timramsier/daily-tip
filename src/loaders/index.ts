@@ -1,3 +1,4 @@
+import { CompositeTipLoader } from './composite-loader';
 import { JsonTipLoader } from './json-tip-loader';
 import { PoisonTipLoader } from './poison-loader';
 
@@ -19,4 +20,5 @@ export interface TipLoader {
 export default {
   JsonTipLoader,
   PoisonTipLoader,
+  CompositeTipLoader,
 };
