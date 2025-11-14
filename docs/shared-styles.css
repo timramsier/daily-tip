@@ -280,6 +280,23 @@ blockquote {
   outline-offset: 2px;
 }
 
+/* Mermaid diagrams */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  background: var(--color-background-secondary);
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-accent);
+  overflow-x: auto;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   body {
@@ -300,5 +317,14 @@ blockquote {
   
   h3 {
     font-size: 1.1rem;
+  }
+  
+  .tsd-toolbar-links {
+    gap: 1rem;
+  }
+  
+  .mermaid {
+    padding: 0.5rem;
+    margin: 1rem 0;
   }
 }

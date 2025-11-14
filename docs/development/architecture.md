@@ -4,30 +4,132 @@
 
 The Daily Tip application follows a clean, layered architecture with clear separation of concerns.
 
+```mermaid
+graph TB
+    subgraph "Entry Points"
+        CLI[CLI: daily-tip.ts]
+        Web[Web: app.ts]
+        Build[Web Build: daily-tip-web.ts]
+    end
+    
+    subgraph "Builder Pattern"
+        Builder[DailyTipBuilder]
+    end
+    
+    subgraph "Orchestrator Layer"
+        Orchestrator[DefaultTipOrchestrator]
+    end
+    
+    subgraph "Component Layer"
+        Loaders[Loaders<br/>- JsonTipLoader<br/>- CompositeTipLoader]
+        Selectors[Selectors<br/>- RandomTipSelector]
+        Formatters[Formatters<br/>- HtmlTipFormatter<br/>- MarkdownTipFormatter<br/>- ShellTipFormatter]
+    end
+    
+    CLI --> Builder
+    Web --> Builder
+    Build --> Builder
+    Builder --> Orchestrator
+    Orchestrator --> Loaders
+    Orchestrator --> Selectors
+    Orchestrator --> Formatters
+    
+    style CLI fill:#e1f5ff
+    style Web fill:#e1f5ff
+    style Build fill:#e1f5ff
+    style Builder fill:#fff4e1
+    style Orchestrator fill:#ffe1f5
+    style Loaders fill:#e1ffe1
+    style Selectors fill:#e1ffe1
+    style Formatters fill:#e1ffe1
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                        Entry Points                          │
-│  (CLI: daily-tip.ts, Web: app.ts, Web Build: daily-tip-web.ts) │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────────┐
-│                     Builder Pattern                          │
-│                  (DailyTipBuilder)                           │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────────┐
-│                    Orchestrator Layer                        │
-│              (DefaultTipOrchestrator)                        │
-│  Coordinates: Loader → Selector → Formatter                 │
-└─────┬──────────────┬──────────────┬─────────────────────────┘
-      │              │              │
-┌─────▼──────┐ ┌────▼──────┐ ┌────▼──────────┐
-│  Loaders   │ │ Selectors │ │  Formatters   │
-│            │ │           │ │               │
-│ - JSON     │ │ - Random  │ │ - HTML        │
-│ - Composite│ │           │ │ - Markdown    │
-│            │ │           │ │ - Shell       │
-└────────────┘ └───────────┘ └───────────────┘
+
+## Class Diagram
+
+```mermaid
+classDiagram
+    class TipLoader {
+        <<interface>>
+        +getTips() Tip[]
+        +getCollectionTitle() string
+    }
+    
+    class TipSelector {
+        <<interface>>
+        +getTip(tips: Tip[]) Tip
+    }
+    
+    class TipFormatter~T~ {
+        <<interface>>
+        +formatTip(tip: Tip, categoryTitle?: string) T
+    }
+    
+    class TipOrchestrator~T~ {
+        <<interface>>
+        +getTip() T
+    }
+    
+    class DailyTipBuilder~T~ {
+        -loader: TipLoader
+        -selector: TipSelector
+        -formatter: TipFormatter~T~
+        -orchestratorClass
+        +withLoader(loader) this
+        +withSelector(selector) this
+        +withFormatter(formatter) this
+        +withOrchestrator(orchestrator) this
+        +build() TipOrchestrator~T~
+    }
+    
+    class DefaultTipOrchestrator~T~ {
+        -tips: Tip[]
+        -selector: TipSelector
+        -formatter: TipFormatter~T~
+        -collectionTitle: string
+        +getTip() T
+    }
+    
+    class JsonTipLoader {
+        -tips: Tip[]
+        -collectionTitle: string
+        +getTips() Tip[]
+        +getCollectionTitle() string
+    }
+    
+    class CompositeTipLoader {
+        -tips: TipCollection
+        +getTips() Tip[]
+        +getCollectionTitle() string
+    }
+    
+    class RandomTipSelector {
+        +getTip(tips: Tip[]) Tip
+    }
+    
+    class HtmlTipFormatter {
+        -marked: Marked
+        +formatTip(tip: Tip, categoryTitle?: string) string
+    }
+    
+    class ShellTipFormatter {
+        +formatTip(tip: Tip, categoryTitle?: string) string
+    }
+    
+    TipLoader <|.. JsonTipLoader
+    TipLoader <|.. CompositeTipLoader
+    TipSelector <|.. RandomTipSelector
+    TipFormatter <|.. HtmlTipFormatter
+    TipFormatter <|.. ShellTipFormatter
+    TipOrchestrator <|.. DefaultTipOrchestrator
+    
+    DailyTipBuilder --> TipLoader
+    DailyTipBuilder --> TipSelector
+    DailyTipBuilder --> TipFormatter
+    DailyTipBuilder ..> TipOrchestrator : creates
+    
+    DefaultTipOrchestrator --> TipLoader
+    DefaultTipOrchestrator --> TipSelector
+    DefaultTipOrchestrator --> TipFormatter
 ```
 
 ## Core Components
@@ -96,33 +198,61 @@ interface TipOrchestrator<T> {
 ## Data Flow
 
 ### CLI Flow
-```
-User Command
-    ↓
-daily-tip.ts (parses args)
-    ↓
-DailyTipBuilder
-    ↓
-DefaultTipOrchestrator
-    ↓
-JsonTipLoader → RandomTipSelector → ShellTipFormatter
-    ↓
-Formatted Output to Console
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant CLI as daily-tip.ts
+    participant Builder as DailyTipBuilder
+    participant Orchestrator as DefaultTipOrchestrator
+    participant Loader as JsonTipLoader
+    participant Selector as RandomTipSelector
+    participant Formatter as ShellTipFormatter
+    
+    User->>CLI: npm run daily-tip
+    CLI->>Builder: withLoader(JsonTipLoader)
+    CLI->>Builder: withSelector(RandomTipSelector)
+    CLI->>Builder: withFormatter(ShellTipFormatter)
+    CLI->>Builder: build()
+    Builder->>Orchestrator: new DefaultTipOrchestrator()
+    CLI->>Orchestrator: getTip()
+    Orchestrator->>Loader: getTips()
+    Loader-->>Orchestrator: Tip[]
+    Orchestrator->>Selector: getTip(tips)
+    Selector-->>Orchestrator: Tip
+    Orchestrator->>Formatter: formatTip(tip)
+    Formatter-->>Orchestrator: formatted string
+    Orchestrator-->>CLI: formatted string
+    CLI-->>User: Display in console
 ```
 
 ### Web Flow
-```
-Page Load
-    ↓
-app.ts (reads URL params)
-    ↓
-DailyTipBuilder
-    ↓
-DefaultTipOrchestrator
-    ↓
-BrowserTipLoader → RandomTipSelector → HtmlTipFormatter
-    ↓
-Rendered HTML in Browser
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant App as app.ts
+    participant Builder as DailyTipBuilder
+    participant Orchestrator as DefaultTipOrchestrator
+    participant Loader as BrowserTipLoader
+    participant Selector as RandomTipSelector
+    participant Formatter as HtmlTipFormatter
+    
+    Browser->>App: Page Load
+    App->>Builder: withLoader(BrowserTipLoader)
+    App->>Builder: withSelector(RandomTipSelector)
+    App->>Builder: withFormatter(HtmlTipFormatter)
+    App->>Builder: build()
+    Builder->>Orchestrator: new DefaultTipOrchestrator()
+    App->>Orchestrator: getTip()
+    Orchestrator->>Loader: getTips()
+    Loader-->>Orchestrator: Tip[]
+    Orchestrator->>Selector: getTip(tips)
+    Selector-->>Orchestrator: Tip
+    Orchestrator->>Formatter: formatTip(tip)
+    Formatter-->>Orchestrator: HTML string
+    Orchestrator-->>App: HTML string
+    App-->>Browser: Render HTML
 ```
 
 ## Key Design Decisions

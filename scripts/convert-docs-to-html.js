@@ -24,6 +24,21 @@ const template = (title, content, depth) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} - Daily Tip Documentation</title>
   <link rel="stylesheet" href="${sharedStylesPath}">
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+      startOnLoad: true,
+      theme: 'default',
+      themeVariables: {
+        primaryColor: '#e1f5ff',
+        primaryTextColor: '#222',
+        primaryBorderColor: '#1f70c2',
+        lineColor: '#1f70c2',
+        secondaryColor: '#fff4e1',
+        tertiaryColor: '#e1ffe1'
+      }
+    });
+  </script>
 </head>
 <body>
   <header class="tsd-page-toolbar">
@@ -58,12 +73,28 @@ function convertMarkdownFile(filePath, relativePath) {
   const processedMarkdown = markdown.replace(/\.md\)/g, '.html)');
   
   const html = marked.parse(processedMarkdown);
+  
+  // Convert Mermaid code blocks to proper format
+  const processedHtml = html.replace(
+    /<pre><code class="language-mermaid">([\s\S]*?)<\/code><\/pre>/g,
+    (match, code) => {
+      // Decode HTML entities
+      const decodedCode = code
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&');
+      return `<pre class="mermaid">${decodedCode}</pre>`;
+    }
+  );
+  
   const title = path.basename(filePath, '.md');
   
   // Calculate depth (number of subdirectories)
   const depth = (relativePath.match(/\//g) || []).length;
   
-  const fullHtml = template(title, html, depth);
+  const fullHtml = template(title, processedHtml, depth);
   
   const outputPath = path.join(outputDir, relativePath.replace('.md', '.html'));
   const outputDirPath = path.dirname(outputPath);
