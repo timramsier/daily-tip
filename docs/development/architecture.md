@@ -44,92 +44,54 @@ graph TB
     style Formatters fill:#e1ffe1
 ```
 
-## Class Diagram
+## Component Relationships
 
 ```mermaid
-classDiagram
-    class TipLoader {
-        <<interface>>
-        +getTips()
-        +getCollectionTitle()
-    }
+graph LR
+    subgraph Interfaces
+        TipLoader[TipLoader Interface]
+        TipSelector[TipSelector Interface]
+        TipFormatter[TipFormatter Interface]
+        TipOrchestrator[TipOrchestrator Interface]
+    end
     
-    class TipSelector {
-        <<interface>>
-        +getTip(tips)
-    }
+    subgraph Implementations
+        JsonTipLoader[JsonTipLoader]
+        CompositeTipLoader[CompositeTipLoader]
+        RandomTipSelector[RandomTipSelector]
+        HtmlTipFormatter[HtmlTipFormatter]
+        ShellTipFormatter[ShellTipFormatter]
+        MarkdownTipFormatter[MarkdownTipFormatter]
+        DefaultTipOrchestrator[DefaultTipOrchestrator]
+    end
     
-    class TipFormatter {
-        <<interface>>
-        +formatTip(tip, categoryTitle)
-    }
+    subgraph Builder
+        DailyTipBuilder[DailyTipBuilder]
+    end
     
-    class TipOrchestrator {
-        <<interface>>
-        +getTip()
-    }
+    TipLoader -.implements.- JsonTipLoader
+    TipLoader -.implements.- CompositeTipLoader
+    TipSelector -.implements.- RandomTipSelector
+    TipFormatter -.implements.- HtmlTipFormatter
+    TipFormatter -.implements.- ShellTipFormatter
+    TipFormatter -.implements.- MarkdownTipFormatter
+    TipOrchestrator -.implements.- DefaultTipOrchestrator
     
-    class DailyTipBuilder {
-        -loader
-        -selector
-        -formatter
-        -orchestratorClass
-        +withLoader(loader)
-        +withSelector(selector)
-        +withFormatter(formatter)
-        +withOrchestrator(orchestrator)
-        +build()
-    }
+    DailyTipBuilder -->|uses| TipLoader
+    DailyTipBuilder -->|uses| TipSelector
+    DailyTipBuilder -->|uses| TipFormatter
+    DailyTipBuilder -->|creates| TipOrchestrator
     
-    class DefaultTipOrchestrator {
-        -tips
-        -selector
-        -formatter
-        -collectionTitle
-        +getTip()
-    }
+    DefaultTipOrchestrator -->|uses| TipLoader
+    DefaultTipOrchestrator -->|uses| TipSelector
+    DefaultTipOrchestrator -->|uses| TipFormatter
     
-    class JsonTipLoader {
-        -tips
-        -collectionTitle
-        +getTips()
-        +getCollectionTitle()
-    }
-    
-    class CompositeTipLoader {
-        -tips
-        +getTips()
-        +getCollectionTitle()
-    }
-    
-    class RandomTipSelector {
-        +getTip(tips)
-    }
-    
-    class HtmlTipFormatter {
-        -marked
-        +formatTip(tip, categoryTitle)
-    }
-    
-    class ShellTipFormatter {
-        +formatTip(tip, categoryTitle)
-    }
-    
-    TipLoader <|.. JsonTipLoader
-    TipLoader <|.. CompositeTipLoader
-    TipSelector <|.. RandomTipSelector
-    TipFormatter <|.. HtmlTipFormatter
-    TipFormatter <|.. ShellTipFormatter
-    TipOrchestrator <|.. DefaultTipOrchestrator
-    
-    DailyTipBuilder --> TipLoader
-    DailyTipBuilder --> TipSelector
-    DailyTipBuilder --> TipFormatter
-    DailyTipBuilder ..> TipOrchestrator
-    
-    DefaultTipOrchestrator --> TipLoader
-    DefaultTipOrchestrator --> TipSelector
-    DefaultTipOrchestrator --> TipFormatter
+    style TipLoader fill:#e1f5ff
+    style TipSelector fill:#e1f5ff
+    style TipFormatter fill:#e1f5ff
+    style TipOrchestrator fill:#e1f5ff
+    style DailyTipBuilder fill:#fff4e1
+    style DefaultTipOrchestrator fill:#ffe1f5
 ```
 
 ## Core Components
