@@ -17,23 +17,35 @@ const template = (title, content, depth) => {
   const sharedStylesPath = `${toRoot}../shared-styles.css`;
   
   return `<!DOCTYPE html>
-<html lang="en">
+<html class="default" lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} - Daily Tip Documentation</title>
   <link rel="stylesheet" href="${sharedStylesPath}">
 </head>
 <body>
-  <div class="container">
-    <div class="nav">
-      <a href="${prefix}../index.html">← Back to API Docs</a>
-      <a href="${toRoot}README.html">Development Home</a>
-      <a href="${toRoot}architecture.html">Architecture</a>
-      <a href="${toRoot}SOLID/README.html">SOLID</a>
-      <a href="${toRoot}design-patterns/README.html">Design Patterns</a>
+  <header class="tsd-page-toolbar">
+    <div class="tsd-toolbar-contents container">
+      <a href="${prefix}../index.html" class="title">Daily Tip Documentation</a>
+      <div class="tsd-toolbar-links">
+        <a href="${toRoot}README.html">Development Home</a>
+        <a href="${toRoot}architecture.html">Architecture</a>
+        <a href="${toRoot}SOLID/README.html">SOLID</a>
+        <a href="${toRoot}design-patterns/README.html">Design Patterns</a>
+      </div>
     </div>
-    ${content}
+  </header>
+  <div class="container container-main">
+    <div class="col-content">
+      <div class="tsd-page-title">
+        <h1>${title}</h1>
+      </div>
+      <div class="tsd-panel tsd-typography">
+        ${content}
+      </div>
+    </div>
   </div>
 </body>
 </html>`;
