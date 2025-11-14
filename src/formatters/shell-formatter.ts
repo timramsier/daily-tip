@@ -4,33 +4,67 @@ import chalk from 'chalk';
 
 export class ShellTipFormatter implements TipFormatter<string> {
   formatTip({ title, tip }: Tip, categoryTitle?: string): string {
-    const formattedTitle = chalk.bold.cyan(title);
+    const formattedTitle = this.formatTitle(title);
     const formattedTip = this.formatMarkdown(tip);
-    const horizontalRule = chalk.gray('─'.repeat(80));
+    const horizontalRule = this.createHorizontalRule();
 
     if (categoryTitle) {
-      const formattedCategory = chalk.bold.magenta(categoryTitle);
-      return `${horizontalRule}\n${formattedCategory}\n\n${formattedTitle}\n\n${formattedTip}\n${horizontalRule}`;
+      return this.formatWithCategory(formattedTitle, formattedTip, categoryTitle, horizontalRule);
     }
 
-    return `${horizontalRule}\n${formattedTitle}\n\n${formattedTip}\n${horizontalRule}`;
+    return this.formatWithoutCategory(formattedTitle, formattedTip, horizontalRule);
+  }
+
+  private formatTitle(title: string): string {
+    return chalk.bold.cyan(title);
+  }
+
+  private formatCategory(categoryTitle: string): string {
+    return chalk.bold.magenta(categoryTitle);
+  }
+
+  private createHorizontalRule(): string {
+    return chalk.gray('─'.repeat(80));
+  }
+
+  private formatWithCategory(
+    title: string,
+    tip: string,
+    categoryTitle: string,
+    rule: string
+  ): string {
+    const formattedCategory = this.formatCategory(categoryTitle);
+    return `${rule}\n${formattedCategory}\n\n${title}\n\n${tip}\n${rule}`;
+  }
+
+  private formatWithoutCategory(title: string, tip: string, rule: string): string {
+    return `${rule}\n${title}\n\n${tip}\n${rule}`;
   }
 
   private formatMarkdown(text: string): string {
-    // Handle bold text **text** first (before italics)
-    text = text.replace(/\*\*(.+?)\*\*/g, (_, content) => chalk.bold(content));
+    let formatted = text;
+    formatted = this.formatBoldText(formatted);
+    formatted = this.formatItalicText(formatted);
+    formatted = this.formatInlineCode(formatted);
+    formatted = this.formatBulletLists(formatted);
+    return formatted;
+  }
 
-    // Handle italic/quoted text *"quoted"* or *text* - use lighter gray
-    text = text.replace(/\*([^*]+?)\*/g, (_, content) => chalk.gray(content));
+  private formatBoldText(text: string): string {
+    return text.replace(/\*\*(.+?)\*\*/g, (_, content) => chalk.bold(content));
+  }
 
-    // Handle inline code `code`
-    text = text.replace(/`(.+?)`/g, (_, content) => chalk.yellow(content));
+  private formatItalicText(text: string): string {
+    return text.replace(/\*([^*]+?)\*/g, (_, content) => chalk.gray(content));
+  }
 
-    // Handle bullet lists - convert to styled bullets (do this last to preserve formatting)
-    text = text.replace(/^[\s]*[-*]\s+(.+)$/gm, (_, content) => {
+  private formatInlineCode(text: string): string {
+    return text.replace(/`(.+?)`/g, (_, content) => chalk.yellow(content));
+  }
+
+  private formatBulletLists(text: string): string {
+    return text.replace(/^[\s]*[-*]\s+(.+)$/gm, (_, content) => {
       return `  ${chalk.cyan('•')} ${content}`;
     });
-
-    return text;
   }
 }
