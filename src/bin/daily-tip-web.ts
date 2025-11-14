@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 
-import DailyTipBuilder from '../index';
-import { JsonTipLoader } from '../loaders/json-tip-loader';
-import RandomTipSelector from '../selectors/random-tip';
-import DefaultTipOrchestrator from '../orchestrator/default';
-import { HtmlTipFormatter } from '../formatters/html-formatter';
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -23,24 +18,19 @@ if (collectionFiles.length === 0) {
   process.exit(0);
 }
 
+// Bundle all collections into a single JavaScript file
+const collections: Record<string, unknown> = {};
+
 collectionFiles.forEach((file) => {
   const collectionName = path.basename(file, '.json');
   const collectionPath = path.join(collectionsDir, file);
-
-  const builder = new DailyTipBuilder<string>();
-  const orchestrator = builder
-    .withLoader(new JsonTipLoader(collectionPath))
-    .withSelector(new RandomTipSelector())
-    .withFormatter(new HtmlTipFormatter())
-    .withOrchestrator(DefaultTipOrchestrator)
-    .build();
-
-  const tip = orchestrator.getTip();
-
-  // Write tip data as a JavaScript file to avoid CORS issues
-  const jsContent = `window.tipData_${collectionName.replace(/-/g, '_')} = ${JSON.stringify({ html: tip, timestamp: Date.now() })};`;
-  const outputFile = path.join(outputDir, `${collectionName}.js`);
-  fs.writeFileSync(outputFile, jsContent);
-
-  console.log(`Tip generated: dist/public/${collectionName}.js`);
+  const collectionData = JSON.parse(fs.readFileSync(collectionPath, 'utf-8'));
+  collections[collectionName] = collectionData;
 });
+
+// Write collections data as a JavaScript file
+const jsContent = `window.tipCollections = ${JSON.stringify(collections, null, 2)};`;
+const outputFile = path.join(outputDir, 'tip-data.js');
+fs.writeFileSync(outputFile, jsContent);
+
+console.log(`Collections bundled: dist/public/tip-data.js`);
