@@ -1,0 +1,110 @@
+name: Build and Publish to Gist
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build package
+        run: npm run build
+      
+      - name: Create gist content
+        id: gist-content
+        run: |
+          cd dist/public
+          
+          # Create a JSON payload for the gist
+          echo "Creating gist payload..."
+          
+          # Start building the JSON
+          echo '{' > /tmp/gist.json
+          echo '  "description": "Daily Tip - Built from commit ${{ github.sha }}",' >> /tmp/gist.json
+          echo '  "public": true,' >> /tmp/gist.json
+          echo '  "files": {' >> /tmp/gist.json
+          
+          # Find all files recursively and add them to the gist
+          first=true
+          find . -type f | while read -r file; do
+            # Remove leading ./
+            filename="${file#./}"
+            
+            # Replace / with - for gist filename (gists don't support directories)
+            gist_filename=$(echo "$filename" | sed 's/\//-/g')
+            
+            # Read and escape file content for JSON
+            content=$(cat "$file" | jq -Rs .)
+            
+            # Add comma if not first file
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo ',' >> /tmp/gist.json
+            fi
+            
+            # Add file entry
+            echo "    \"$gist_filename\": {" >> /tmp/gist.json
+            echo "      \"content\": $content" >> /tmp/gist.json
+            echo -n "    }" >> /tmp/gist.json
+          done
+          
+          # Close the JSON
+          echo '' >> /tmp/gist.json
+          echo '  }' >> /tmp/gist.json
+          echo '}' >> /tmp/gist.json
+          
+          echo "Gist payload created with $(find . -type f | wc -l) files"
+      
+      - name: Create or Update Gist
+        id: gist
+        run: |
+          GIST_ID="${{ secrets.GIST_ID }}"
+          
+          if [ -z "$GIST_ID" ]; then
+            echo "Creating new gist..."
+            RESPONSE=$(curl -X POST \
+              -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/gists \
+              -d @/tmp/gist.json)
+            
+            GIST_ID=$(echo "$RESPONSE" | jq -r '.id')
+            echo "gist_id=$GIST_ID" >> $GITHUB_OUTPUT
+            echo "::notice::New Gist created with ID: $GIST_ID"
+            echo "::notice::Add this as a secret named GIST_ID to update the same gist in future runs"
+          else
+            echo "Updating existing gist: $GIST_ID"
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/gists/$GIST_ID \
+              -d @/tmp/gist.json
+            
+            echo "gist_id=$GIST_ID" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "gist_url=https://gist.github.com/${{ github.repository_owner }}/$GIST_ID" >> $GITHUB_OUTPUT
+          echo "html_preview=https://htmlpreview.github.io/?https://gist.githubusercontent.com/${{ github.repository_owner }}/$GIST_ID/raw/index.html" >> $GITHUB_OUTPUT
+      
+      - name: Comment on commit
+        if: github.event_name == 'push'
+        run: |
+          echo "::notice::Gist URL: ${{ steps.gist.outputs.gist_url }}"
+          echo "::notice::Preview URL: ${{ steps.gist.outputs.html_preview }}"
