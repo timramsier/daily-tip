@@ -72,13 +72,23 @@ jobs:
       
       - name: Create or Update Gist
         id: gist
+        env:
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
         run: |
+          # Check if token exists
+          if [ -z "$GIST_TOKEN" ]; then
+            echo "::error::GIST_TOKEN secret is not set!"
+            exit 1
+          fi
+          
+          echo "Token is set (first 4 chars: ${GIST_TOKEN:0:4}...)"
+          
           GIST_ID="${{ secrets.GIST_ID }}"
           
           if [ -z "$GIST_ID" ]; then
             echo "Creating new gist..."
             RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
-              -H "Authorization: Bearer ${{ secrets.GIST_TOKEN }}" \
+              -H "Authorization: Bearer $GIST_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/gists \
               -d @/tmp/gist.json)
@@ -106,7 +116,7 @@ jobs:
           else
             echo "Updating existing gist: $GIST_ID"
             RESPONSE=$(curl -s -w "\n%{http_code}" -X PATCH \
-              -H "Authorization: Bearer ${{ secrets.GIST_TOKEN }}" \
+              -H "Authorization: Bearer $GIST_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/gists/$GIST_ID \
               -d @/tmp/gist.json)
