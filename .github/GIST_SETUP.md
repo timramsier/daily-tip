@@ -21,16 +21,9 @@ This workflow automatically builds the package and publishes the `dist/public/` 
 4. Value: Paste your personal access token
 5. Click "Add secret"
 
-### 3. (Optional) Pin to a Specific Gist
+### 3. Automatic Gist Management
 
-After the first run, the workflow will create a new gist. If you want subsequent runs to update the same gist instead of creating new ones:
-
-1. Check the workflow run output for the Gist ID
-2. Go to repository Settings → Secrets and variables → Actions
-3. Click "New repository secret"
-4. Name: `GIST_ID`
-5. Value: The gist ID from the workflow output
-6. Click "Add secret"
+The workflow automatically finds and updates a gist named "daily-tip". On the first run, it creates a new gist with this name. On subsequent runs, it finds and updates the same gist automatically - no need to configure a `GIST_ID` secret!
 
 ## Usage
 

@@ -56,9 +56,9 @@ jobs:
                   
                   files[gist_filename] = {"content": content}
           
-          # Create the gist payload
+          # Create the gist payload (description will be updated later)
           gist_data = {
-              "description": "Daily Tip - Built from commit ${{ github.sha }}",
+              "description": "daily-tip",
               "public": True,
               "files": files
           }
@@ -83,15 +83,26 @@ jobs:
           
           echo "Token is set (first 4 chars: ${GIST_TOKEN:0:4}...)"
           
-          GIST_ID="${{ secrets.GIST_ID }}"
+          # Look for existing gist named "daily-tip"
+          echo "Searching for existing 'daily-tip' gist..."
+          GISTS_RESPONSE=$(curl -s \
+            -H "Authorization: Bearer $GIST_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/gists)
           
-          if [ -z "$GIST_ID" ]; then
-            echo "Creating new gist..."
+          GIST_ID=$(echo "$GISTS_RESPONSE" | jq -r '.[] | select(.description == "daily-tip") | .id' | head -n1)
+          
+          if [ -z "$GIST_ID" ] || [ "$GIST_ID" = "null" ]; then
+            echo "Creating new 'daily-tip' gist..."
+            
+            # Update description in the JSON
+            jq '.description = "daily-tip"' /tmp/gist.json > /tmp/gist-updated.json
+            
             RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
               -H "Authorization: Bearer $GIST_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/gists \
-              -d @/tmp/gist.json)
+              -d @/tmp/gist-updated.json)
             
             HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
             BODY=$(echo "$RESPONSE" | sed '$d')
@@ -109,17 +120,20 @@ jobs:
             
             echo "gist_id=$GIST_ID" >> $GITHUB_OUTPUT
             echo "gist_url=$GIST_URL" >> $GITHUB_OUTPUT
-            echo "::notice::✅ New Gist created!"
+            echo "::notice::✅ New 'daily-tip' gist created!"
             echo "::notice::Gist ID: $GIST_ID"
             echo "::notice::Gist URL: $GIST_URL"
-            echo "::notice::💡 Add GIST_ID=$GIST_ID as a secret to update the same gist in future runs"
           else
-            echo "Updating existing gist: $GIST_ID"
+            echo "Updating existing 'daily-tip' gist: $GIST_ID"
+            
+            # Update description in the JSON
+            jq '.description = "daily-tip"' /tmp/gist.json > /tmp/gist-updated.json
+            
             RESPONSE=$(curl -s -w "\n%{http_code}" -X PATCH \
               -H "Authorization: Bearer $GIST_TOKEN" \
               -H "Accept: application/vnd.github.v3+json" \
               https://api.github.com/gists/$GIST_ID \
-              -d @/tmp/gist.json)
+              -d @/tmp/gist-updated.json)
             
             HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
             BODY=$(echo "$RESPONSE" | sed '$d')
@@ -136,7 +150,7 @@ jobs:
             
             echo "gist_id=$GIST_ID" >> $GITHUB_OUTPUT
             echo "gist_url=$GIST_URL" >> $GITHUB_OUTPUT
-            echo "::notice::✅ Gist updated!"
+            echo "::notice::✅ 'daily-tip' gist updated!"
             echo "::notice::Gist URL: $GIST_URL"
           fi
           
