@@ -47,44 +47,59 @@ graph TB
 ## Component Relationships
 
 ```mermaid
-graph LR
-    subgraph Interfaces
-        TipLoader[TipLoader Interface]
-        TipSelector[TipSelector Interface]
-        TipFormatter[TipFormatter Interface]
-        TipOrchestrator[TipOrchestrator Interface]
+graph TB
+    subgraph Interfaces["🔷 Interfaces"]
+        TipLoader["TipLoader<br/>getTips(), getCollectionTitle()"]
+        TipSelector["TipSelector<br/>getTip(tips)"]
+        TipFormatter["TipFormatter<br/>formatTip(tip, categoryTitle)"]
+        TipOrchestrator["TipOrchestrator<br/>getTip()"]
     end
     
-    subgraph Implementations
-        JsonTipLoader[JsonTipLoader]
-        CompositeTipLoader[CompositeTipLoader]
-        RandomTipSelector[RandomTipSelector]
-        HtmlTipFormatter[HtmlTipFormatter]
-        ShellTipFormatter[ShellTipFormatter]
-        MarkdownTipFormatter[MarkdownTipFormatter]
-        DefaultTipOrchestrator[DefaultTipOrchestrator]
+    subgraph Loaders["📁 Loaders"]
+        JsonTipLoader["JsonTipLoader<br/>Loads from JSON files"]
+        CompositeTipLoader["CompositeTipLoader<br/>Combines multiple loaders"]
     end
     
-    subgraph Builder
-        DailyTipBuilder[DailyTipBuilder]
+    subgraph Selectors["🎲 Selectors"]
+        RandomTipSelector["RandomTipSelector<br/>Random selection"]
     end
     
-    TipLoader -.implements.- JsonTipLoader
-    TipLoader -.implements.- CompositeTipLoader
-    TipSelector -.implements.- RandomTipSelector
-    TipFormatter -.implements.- HtmlTipFormatter
-    TipFormatter -.implements.- ShellTipFormatter
-    TipFormatter -.implements.- MarkdownTipFormatter
-    TipOrchestrator -.implements.- DefaultTipOrchestrator
+    subgraph Formatters["🎨 Formatters"]
+        HtmlTipFormatter["HtmlTipFormatter<br/>HTML output"]
+        ShellTipFormatter["ShellTipFormatter<br/>Terminal output"]
+        MarkdownTipFormatter["MarkdownTipFormatter<br/>Markdown output"]
+    end
     
+    subgraph Orchestrators["🎭 Orchestrators"]
+        DefaultTipOrchestrator["DefaultTipOrchestrator<br/>Coordinates components"]
+    end
+    
+    subgraph Builder["🏗️ Builder"]
+        DailyTipBuilder["DailyTipBuilder<br/>Fluent API for construction"]
+    end
+    
+    %% Interface implementations
+    TipLoader -.->|implements| JsonTipLoader
+    TipLoader -.->|implements| CompositeTipLoader
+    TipSelector -.->|implements| RandomTipSelector
+    TipFormatter -.->|implements| HtmlTipFormatter
+    TipFormatter -.->|implements| ShellTipFormatter
+    TipFormatter -.->|implements| MarkdownTipFormatter
+    TipOrchestrator -.->|implements| DefaultTipOrchestrator
+    
+    %% Builder relationships
     DailyTipBuilder -->|uses| TipLoader
     DailyTipBuilder -->|uses| TipSelector
     DailyTipBuilder -->|uses| TipFormatter
-    DailyTipBuilder -->|creates| TipOrchestrator
+    DailyTipBuilder -->|creates| DefaultTipOrchestrator
     
+    %% Orchestrator relationships
     DefaultTipOrchestrator -->|uses| TipLoader
     DefaultTipOrchestrator -->|uses| TipSelector
     DefaultTipOrchestrator -->|uses| TipFormatter
+    
+    %% Composite pattern
+    CompositeTipLoader -.->|contains| TipLoader
     
     style TipLoader fill:#e1f5ff
     style TipSelector fill:#e1f5ff
