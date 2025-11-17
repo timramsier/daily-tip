@@ -11,6 +11,14 @@ import fs from 'node:fs';
 
 const collectionsDir = path.resolve(__dirname, '../../collections');
 
+/**
+ * Retrieves the list of available tip collections from the collections directory.
+ *
+ * Scans the collections directory for JSON files and returns their base names
+ * without the .json extension.
+ *
+ * @returns Array of collection names (e.g., ['leadership-tone', 'productivity-hacks'])
+ */
 function getAvailableCollections(): string[] {
   return fs
     .readdirSync(collectionsDir)
@@ -18,6 +26,12 @@ function getAvailableCollections(): string[] {
     .map((file) => path.basename(file, '.json'));
 }
 
+/**
+ * Displays help information including usage, available collections, and examples.
+ *
+ * Prints to console the command syntax, list of available collections,
+ * and example usage patterns.
+ */
 function showHelp() {
   const collections = getAvailableCollections();
   console.log('Usage: daily-tip <collection-type> [collection-type...]');

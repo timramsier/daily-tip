@@ -1,5 +1,15 @@
 #!/usr/bin/env node
 
+/**
+ * Build script that bundles tip collections into a browser-compatible JavaScript file.
+ *
+ * This script reads all JSON collection files from the collections directory and
+ * combines them into a single JavaScript file (tip-data.js) that can be loaded
+ * in the browser. The collections are exposed via window.tipCollections.
+ *
+ * Output: dist/public/tip-data.js
+ */
+
 import path from 'node:path';
 import fs from 'node:fs';
 

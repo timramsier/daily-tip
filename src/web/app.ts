@@ -8,17 +8,49 @@ import { CompositeTipLoader } from '../loaders/composite-loader';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const win = window as any;
 
-// Create a simple loader that returns the collection data
+/**
+ * Browser-compatible tip loader that wraps a TipCollection.
+ *
+ * This loader is designed for use in browser environments where collections
+ * are loaded via script tags rather than file system access. It implements
+ * the TipLoader interface by wrapping a pre-loaded TipCollection object.
+ */
 class BrowserTipLoader {
+  /**
+   * Creates a new browser tip loader.
+   *
+   * @param collection - Pre-loaded tip collection to wrap
+   */
   constructor(private collection: TipCollection) {}
+  
+  /**
+   * Retrieves tips from the wrapped collection.
+   *
+   * @returns Array of tips from the collection
+   */
   getTips() {
     return this.collection.tips;
   }
+  
+  /**
+   * Retrieves the collection title.
+   *
+   * @returns Title of the collection
+   */
   getCollectionTitle() {
     return this.collection.title;
   }
 }
 
+/**
+ * Displays a random tip in the browser based on URL parameters.
+ *
+ * Reads the 'type' query parameter to determine which collection(s) to display.
+ * If no type is specified, shows a selection menu. Supports multiple collections
+ * via comma-separated values (e.g., ?type=leadership-tone,productivity-hacks).
+ *
+ * Expects window.tipCollections to be populated by tip-data.js script.
+ */
 function displayTip() {
   const urlParams = new URLSearchParams(window.location.search);
   const tipTypeParam = urlParams.get('type');
